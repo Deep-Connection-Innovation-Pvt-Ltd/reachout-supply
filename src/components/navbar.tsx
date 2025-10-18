@@ -1,0 +1,20 @@
+import { Button } from './ui/button';
+
+export default function Navbar() {
+    return (
+        <>
+            <div className="flex justify-between w-full items-center bg-background px-[80px] py-[16px] sticky">
+                <img
+                    src="./ReachOut.png"
+                    alt="ReachOut Logo"
+                    className="h-6 w-auto object-contain"
+                />
+                <Button variant="default"
+                    size="default"
+                    className="px-4 sm:px-6 py-3 text-sm sm:text-base min-h-[44px]">
+                    Join Founding Cohort
+                </Button>
+            </div>
+        </>
+    )
+};

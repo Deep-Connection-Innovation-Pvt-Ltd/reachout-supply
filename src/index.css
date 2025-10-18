@@ -50,7 +50,7 @@
 
 :root {
         /* ReachOut Brand Colors - Pink Theme */
-        --background: #ffffff; /* 0 0% 100%; */
+        --background: #fff0f5; /* 0 0% 100%; */
         --foreground: #3b2222; /* 220 13% 18%; */
         
         --card: #ffffff; /* 0 0% 100%; */
@@ -158,14 +158,11 @@
 
 @layer base {
     * {
-        /* Replace @apply with standard CSS properties */
         border: var(--border);
         outline: var(--ring) 50;
-        /* Replace @apply with standard CSS properties */
-        background-color: #ffffff; /* hsl(var(--background)); */
-        color: #3b2222; /* hsl(var(--foreground)); */
     }
     body {
         @apply bg-background text-foreground;
+        background-color: var(--background);
     }
 }
