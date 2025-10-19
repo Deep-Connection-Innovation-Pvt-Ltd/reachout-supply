@@ -5,7 +5,7 @@ export default function Navbar() {
         <>
             <div className="flex justify-between w-full items-center bg-background px-[80px] py-[16px] sticky top-0 z-99">
                 <img
-                    src="./ReachOut.png"
+                    src="../ReachOut.png"
                     alt="ReachOut Logo"
                     className="h-6 w-auto object-contain"
                 />

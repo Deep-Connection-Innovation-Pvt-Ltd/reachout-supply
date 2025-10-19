@@ -22,6 +22,7 @@ export default function Plans() {
                         originalPrice={10000}
                         discountedPrice={7000}
                         targetDate="2025-10-25T00:00:00"
+                        plan="foundational"
                         earlyBirdSpotPercentage={15}
                         features={["100+ hours of online counseling sessions with real clients.", "Start earning up to ₹1,000 per session after completing 100 hours", "Individual mentor support for difficult cases", "Weekly group supervision sessions with fellow graduates.", "Certificate of completion after completing 100 hours.", "Unlimited Free Access to our Latest EHR platform for maintaining digital notes of clients.", "Lifetime access to the alumni network and resources."]}
                     />
@@ -30,6 +31,7 @@ export default function Plans() {
                         originalPrice={20000}
                         discountedPrice={14000}
                         targetDate="2025-10-25T00:00:00"
+                        plan="elite"
                         earlyBirdSpotPercentage={30}
                         isPopular
                         features={["100+ hours of online counseling sessions with real clients.", "Start earning up to ₹1,000 per session after completing 100 hours", "Individual mentor support for difficult cases", "Exclusive access to premium psychology practice resources.", "Certificate of completion after completing 100 hours.", "Unlimited Free Access to our Latest EHR platform for maintaining digital notes of clients.", "Lifetime access to the alumni network and resources.", "Founding member leadership role in expanding the program.", "10+ counseling sessions supervised by senior psychologists.", "Waiver available if you have proof of 100 hours of sessions with clients."]}

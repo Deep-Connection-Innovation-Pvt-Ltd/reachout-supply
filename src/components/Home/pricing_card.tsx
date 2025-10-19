@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 import {
     Clock,
     Zap,
@@ -90,6 +91,7 @@ interface PricingCardProps {
     isPopular?: boolean;
     features: string[];
     targetDate?: string;
+    plan: "elite" | "foundational";
 }
 
 export default function PricingCard({
@@ -100,6 +102,7 @@ export default function PricingCard({
     earlyBirdSpotPercentage = 100,
     isPopular = false,
     features = [],
+    plan,
 }: PricingCardProps) {
     const [timeLeft, setTimeLeft] = useState<ReturnType<typeof calculateTimeLeft> | null>(
         targetDate ? calculateTimeLeft(targetDate) : null
@@ -209,18 +212,20 @@ export default function PricingCard({
                                     </div>
                                 </div>
                             )}
-
-                            <Button
-                                className={`w-full mt-4 h-12 ${isPopular
-                                    ? "bg-primary hover:bg-primary/90 cursor-pointer"
-                                    : "bg-primary hover:opacity-90 cursor-pointer"
+                            <Link to={`/apply-${plan}`}>
+                                <Button
+                                    className={`w-full mt-4 h-12 ${
+                                        isPopular
+                                            ? "bg-primary hover:bg-primary/90 cursor-pointer"
+                                            : "bg-primary hover:opacity-90 cursor-pointer"
                                     }`}
-                                size="lg"
-                            >
-                                <Trophy className="w-4 h-4 mr-2" />
-                                Join Founding Cohort
-                                <ArrowRight className="w-4 h-4 ml-2" />
-                            </Button>
+                                    size="lg"
+                                >
+                                    <Trophy className="w-4 h-4 mr-2" />
+                                    Join Founding Cohort
+                                    <ArrowRight className="w-4 h-4 ml-2" />
+                                </Button>
+                            </Link>
                         </CardContent>
 
                         <CardFooter className="pt-6 px-6 pb-6">
