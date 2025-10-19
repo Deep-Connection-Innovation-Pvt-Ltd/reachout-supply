@@ -64,19 +64,19 @@
         --primary-foreground: #ffffff; /* 0 0% 100%; */
         
         /* Secondary - Light Pink */
-        --secondary: #f2d3d3; /* 340 100% 97%; */
+        --secondary: #fdfdfd; /* 340 100% 97%; */
         --secondary-foreground: #ff4d7e; /* 340 82% 52%; */
         
         /* Muted */
         --muted: #f2d3d3; /* 340 100% 97%; */
-        --muted-foreground: #3b2222; /* 220 13% 45%; */
+        --muted-foreground: #777676; /* 220 13% 45%; */
         
         /* Accent - Warm Pink */
         --accent: #f2e6e6; /* 340 100% 95%; */
         --accent-foreground: #ff4d7e; /* 340 82% 52%; */
         
         /* Destructive */
-        --destructive: #ff9f00; /* 0 84.2% 60.2%; */
+        --destructive: #ff4d7e; /* 0 84.2% 60.2%; */
         --destructive-foreground: #ffffff; /* 0 0% 100%; */
         
         /* Borders, Inputs, Rings */

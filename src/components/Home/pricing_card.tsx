@@ -185,7 +185,7 @@ export default function PricingCard({
 
                         <CardContent className="px-6 py-0">
 
-                            <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                            <div className="p-3 rounded-lg bg-white border border-primary/60">
                                 <div className="flex items-center gap-2">
                                     <Zap className="w-4 h-4 text-primary" />
                                     <span className="text-sm font-semibold text-primary">
@@ -212,8 +212,8 @@ export default function PricingCard({
 
                             <Button
                                 className={`w-full mt-4 h-12 ${isPopular
-                                    ? "bg-primary hover:bg-primary/90"
-                                    : "bg-primary hover:opacity-90"
+                                    ? "bg-primary hover:bg-primary/90 cursor-pointer"
+                                    : "bg-primary hover:opacity-90 cursor-pointer"
                                     }`}
                                 size="lg"
                             >

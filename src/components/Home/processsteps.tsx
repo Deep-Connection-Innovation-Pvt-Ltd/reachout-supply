@@ -1,5 +1,5 @@
 import { CheckCircle2 } from 'lucide-react';
-import Glory from '../assets/glory.png';
+import Glory from '../../assets/glory.png';
 
 export default function ProcessSteps() {
     const steps = [

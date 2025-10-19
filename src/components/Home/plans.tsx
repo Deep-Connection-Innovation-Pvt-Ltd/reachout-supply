@@ -26,9 +26,9 @@ export default function Plans() {
                         features={["100+ hours of online counseling sessions with real clients.", "Start earning up to ₹1,000 per session after completing 100 hours", "Individual mentor support for difficult cases", "Weekly group supervision sessions with fellow graduates.", "Certificate of completion after completing 100 hours.", "Unlimited Free Access to our Latest EHR platform for maintaining digital notes of clients.", "Lifetime access to the alumni network and resources."]}
                     />
                     <PricingCard
-                        title="Elite Plan"
-                        originalPrice={10000}
-                        discountedPrice={7000}
+                        title="Elite Mentorship Program"
+                        originalPrice={20000}
+                        discountedPrice={14000}
                         targetDate="2025-10-25T00:00:00"
                         earlyBirdSpotPercentage={30}
                         isPopular
