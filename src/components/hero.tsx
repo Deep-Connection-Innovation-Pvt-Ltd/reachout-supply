@@ -56,7 +56,13 @@ export default function Hero() {
 
                                 <Button
                                     size="lg"
-                                    className="bg-primary hover:shadow-glow transition-all duration-300 px-8 sm:px-12 py-6 text-base sm:text-lg min-h-[56px] rounded-full z-10 relative mx-auto"
+                                    onClick={() => {
+                                        const pricingSection = document.getElementById('programs');
+                                        if (pricingSection) {
+                                            pricingSection.scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                    }}
+                                    className="bg-primary cursor-pointer hover:shadow-glow transition-all duration-300 px-8 sm:px-12 py-6 text-base sm:text-lg min-h-[56px] rounded-full z-10 relative mx-auto"
                                 >
                                     <Trophy className="w-6 h-6 mr-3 ml-3" />
                                     <span className="font-semibold">Join Founding Cohort</span>

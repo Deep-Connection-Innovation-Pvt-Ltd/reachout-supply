@@ -10,8 +10,14 @@ export default function Navbar() {
                     className="h-6 w-auto object-contain"
                 />
                 <Button variant="default"
+                    onClick={() => {
+                        const pricingSection = document.getElementById('programs');
+                        if (pricingSection) {
+                            pricingSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }}
                     size="default"
-                    className="px-4 sm:px-6 py-3 text-sm sm:text-base min-h-[44px]">
+                    className="px-4 sm:px-6 py-3 cursor-pointer text-sm sm:text-base min-h-[44px]">
                     Join Founding Cohort
                 </Button>
             </div>
