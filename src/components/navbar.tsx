@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 export default function Navbar() {
     return (
         <>
-            <div className="flex justify-between w-full items-center bg-background px-[80px] py-[16px] sticky">
+            <div className="flex justify-between w-full items-center bg-background px-[80px] py-[16px] sticky top-0 z-99">
                 <img
                     src="./ReachOut.png"
                     alt="ReachOut Logo"
