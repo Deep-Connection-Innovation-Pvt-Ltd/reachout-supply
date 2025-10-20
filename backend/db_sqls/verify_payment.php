@@ -20,8 +20,9 @@ if ($generated_signature === $signature) {
     $stmt->execute();
 
     // Also insert into applications table
+    // Corrected to match the 13 fields being sent from the frontend, letting `order_id`, `created_at`, `updated_at` be handled by the DB.
     $stmt2 = $conn->prepare("INSERT INTO applications (name, email, phone, university, graduationYear, postUniversity, postGraduationYear, mastersPursuing, areaOfExpertise, programType, paymentAmount, rci, cvUpload, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')");
-    $stmt2->bind_param("ssssssssssdss",
+    $stmt2->bind_param("ssssssssssdss", // 13 letters for 13 values
         $data['fullName'],
         $data['email'],
         $data['phone'],
@@ -30,7 +31,7 @@ if ($generated_signature === $signature) {
         $data['postGraduationCollege'],
         $data['postGraduationYear'],
         $data['masters_program'],
-        $data['area_of_expertise'], // Note: other_expertise is not in the DB schema
+        $data['area_of_expertise'],
         $data['programType'],
         $data['amount'],
         $data['rciLicense'],

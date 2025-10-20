@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 export default function PaymentSuccess() {
   const [data, setData] = useState<any>(null);
@@ -7,7 +9,7 @@ export default function PaymentSuccess() {
   const order_id = searchParams.get("order_id");
 
   useEffect(() => {
-    fetch(`./backend/fetch_payment.php?order_id=${order_id}`)
+    fetch(`http://localhost/reachoutprof/backend/db_sqls/fetch_payment.php?order_id=${order_id}`)
       .then((res) => res.json())
       .then((d) => setData(d));
   }, [order_id]);
@@ -23,9 +25,9 @@ export default function PaymentSuccess() {
       <p>Program: {data.program_type}</p>
       <p>Email: {data.customer_email}</p>
       <p>Phone: {data.customer_phone}</p>
-      <a href="/" className="mt-6 inline-block px-4 py-2 bg-blue-500 text-white rounded">
+      <Link to="/" className="mt-6 inline-block px-4 py-2 bg-blue-500 text-white rounded">
         Back to Home
-      </a>
+      </Link>
     </div>
   );
 }
