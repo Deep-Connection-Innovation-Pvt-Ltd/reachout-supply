@@ -10,8 +10,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { FormData } from '@/pages/ApplicationForm';
 
-export default function PersonalDetails() {
+interface PersonalDetailsProps {
+    data: FormData;
+    onDataChange: (data: Partial<FormData>) => void;
+}
+
+export default function PersonalDetails({ data, onDataChange }: PersonalDetailsProps) {
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const validateField = (id: string, value: string) => {
@@ -51,11 +57,20 @@ export default function PersonalDetails() {
         setErrors(prev => ({ ...prev, [id]: error }));
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        onDataChange({ [id]: value } as Partial<FormData>);
+        if (errors[id]) {
+            validateField(id, value);
+        }
+    };
+
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         validateField(e.target.id, e.target.value);
     };
 
     const handleSelectChange = (id: string, value: string) => {
+        onDataChange({ [id]: value } as Partial<FormData>);
         validateField(id, value);
     };
 
@@ -80,7 +95,9 @@ export default function PersonalDetails() {
                                 id="fullName"
                                 placeholder="Your full name"
                                 className={errors.fullName ? "border-red-500" : ""}
+                                value={data.fullName}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.fullName && <p className="text-sm text-red-500">{errors.fullName}</p>}
                         </div>
@@ -93,7 +110,9 @@ export default function PersonalDetails() {
                                 type="email"
                                 placeholder="your.email@domain.com"
                                 className={errors.email ? "border-red-500" : ""}
+                                value={data.email}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
                         </div>
@@ -107,7 +126,9 @@ export default function PersonalDetails() {
                                 placeholder="9876543210"
                                 maxLength={10}
                                 className={errors.phone ? "border-red-500" : ""}
+                                value={data.phone}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
                         </div>
@@ -115,7 +136,7 @@ export default function PersonalDetails() {
                         {/* RCI License */}
                         <div className="space-y-2 w-full">
                             <Label htmlFor="rciLicense">Do you have an RCI License? <span className="text-red-500">*</span></Label>
-                            <Select onValueChange={(value) => handleSelectChange("rciLicense", value)}>
+                            <Select onValueChange={(value) => handleSelectChange("rciLicense", value)} value={data.rciLicense}>
                                 <SelectTrigger className={errors.rciLicense ? "border-red-500" : ""}>
                                     <SelectValue placeholder="Select Yes or No" />
                                 </SelectTrigger>
@@ -134,7 +155,9 @@ export default function PersonalDetails() {
                                 id="graduationCollege"
                                 placeholder="e.g., ABC College"
                                 className={errors.graduationCollege ? "border-red-500" : ""}
+                                value={data.graduationCollege}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.graduationCollege && <p className="text-sm text-red-500">{errors.graduationCollege}</p>}
                         </div>
@@ -146,7 +169,9 @@ export default function PersonalDetails() {
                                 id="graduationYear"
                                 placeholder="e.g., 2023"
                                 className={errors.graduationYear ? "border-red-500" : ""}
+                                value={data.graduationYear}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.graduationYear && <p className="text-sm text-red-500">{errors.graduationYear}</p>}
                         </div>
@@ -158,7 +183,9 @@ export default function PersonalDetails() {
                                 id="postGraduationCollege"
                                 placeholder="e.g., XYZ University"
                                 className={errors.postGraduationCollege ? "border-red-500" : ""}
+                                value={data.postGraduationCollege}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.postGraduationCollege && <p className="text-sm text-red-500">{errors.postGraduationCollege}</p>}
                         </div>
@@ -170,7 +197,9 @@ export default function PersonalDetails() {
                                 id="postGraduationYear"
                                 placeholder="e.g., 2025"
                                 className={errors.postGraduationYear ? "border-red-500" : ""}
+                                value={data.postGraduationYear}
                                 onBlur={handleBlur}
+                                onChange={handleChange}
                             />
                             {errors.postGraduationYear && <p className="text-sm text-red-500">{errors.postGraduationYear}</p>}
                         </div>

@@ -10,16 +10,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FileText, UploadCloud } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { FormData } from '@/pages/ApplicationForm';
 
-export default function AcademicDetails() {
+interface AcademicDetailsProps {
+    data: FormData;
+    onDataChange: (data: Partial<FormData>) => void;
+}
+
+export default function AcademicDetails({ data, onDataChange }: AcademicDetailsProps) {
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [formData, setFormData] = useState({
-        masters_program: '',
-        area_of_expertise: '',
-        other_expertise: '',
-    });
-    const [resume, setResume] = useState<File | null>(null);
-    const [fileName, setFileName] = useState('');
 
     const validateField = (id: string, value: string) => {
         let error = "";
@@ -32,12 +31,12 @@ export default function AcademicDetails() {
                 if (!value.trim()) error = "Please select an option";
                 break;
             case "other_expertise":
-                if (formData.area_of_expertise === 'Others (please specify)' && !value.trim()) {
+                if (data.area_of_expertise === 'Others (please specify)' && !value.trim()) {
                     error = "Please specify your area of expertise";
                 }
                 break;
             case "resume":
-                if (!resume) error = "CV/Resume is required";
+                if (!data.resume) error = "CV/Resume is required";
                 break;
         }
         setErrors(prev => ({ ...prev, [id]: error }));
@@ -45,7 +44,7 @@ export default function AcademicDetails() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        setFormData(prev => ({ ...prev, [id]: value }));
+        onDataChange({ [id]: value } as Partial<FormData>);
         if (errors[id]) {
             validateField(id, value);
         }
@@ -56,7 +55,7 @@ export default function AcademicDetails() {
     };
 
     const handleSelectChange = (id: string, value: string) => {
-        setFormData(prev => ({ ...prev, [id]: value }));
+        onDataChange({ [id]: value } as Partial<FormData>);
         validateField(id, value);
     };
 
@@ -82,6 +81,7 @@ export default function AcademicDetails() {
                                     id="masters_program"
                                     placeholder="e.g., M.A. Clinical Psychology"
                                     className={errors.masters_program ? "border-red-500" : ""}
+                                    value={data.masters_program}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
@@ -91,7 +91,7 @@ export default function AcademicDetails() {
                             {/* Area of Expertise */}
                             <div className="space-y-2 w-full">
                             <Label htmlFor="area_of_expertise">Area of Expertise <span className="text-red-500">*</span></Label>
-                            <Select onValueChange={(value) => handleSelectChange("area_of_expertise", value)}>
+                            <Select onValueChange={(value) => handleSelectChange("area_of_expertise", value)} value={data.area_of_expertise}>
                                 <SelectTrigger className={errors.area_of_expertise ? "border-red-500" : ""}>
                                     <SelectValue placeholder="Select your area of expertise" />
                                 </SelectTrigger>
@@ -105,13 +105,14 @@ export default function AcademicDetails() {
                         </div>
 
                             {/* Other Expertise - Conditional */}
-                            {formData.area_of_expertise === 'Others (please specify)' && (
+                            {data.area_of_expertise === 'Others (please specify)' && (
                                 <div className="space-y-2 md:col-span-2">
                                     <Label htmlFor="other_expertise">Please specify your area of expertise <span className="text-red-500">*</span></Label>
                                     <Input
                                         id="other_expertise"
                                         placeholder="e.g., Child Psychology"
                                         className={errors.other_expertise ? "border-red-500" : ""}
+                                        value={data.other_expertise}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
@@ -129,12 +130,12 @@ export default function AcademicDetails() {
                                             <span className="font-semibold">Click to upload</span> or drag and drop
                                         </p>
                                         <p className="text-xs text-muted-foreground">PDF, DOC, DOCX (MAX. 5MB)</p>
-                                        {fileName && <p className="mt-2 text-sm font-medium text-primary">{fileName}</p>}
+                                        {data.resumeFileName && <p className="mt-2 text-sm font-medium text-primary">{data.resumeFileName}</p>}
                                     </label>
                                     <Input id="resume-upload" type="file" className="hidden" accept=".pdf,.doc,.docx" onChange={(e) => {
                                         const file = e.target.files?.[0] || null;
-                                        setResume(file);
-                                        setFileName(file ? file.name : '');
+                                        onDataChange({ resume: file });
+                                        onDataChange({ resumeFileName: file ? file.name : '' });
                                         validateField("resume", file ? file.name : "");
                                     }} />
                                 </div>
