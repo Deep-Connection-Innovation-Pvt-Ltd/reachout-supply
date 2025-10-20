@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env
+create_admin.php
 
 # Editor directories and files
 .vscode/*
