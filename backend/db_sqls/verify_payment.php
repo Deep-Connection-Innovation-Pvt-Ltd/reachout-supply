@@ -15,27 +15,26 @@ $generated_signature = hash_hmac('sha256', $order_id . "|" . $payment_id, $razor
 
 if ($generated_signature === $signature) {
     // Update order details
-    $stmt = $conn->prepare("UPDATE orders SET payment_id=?, payment_signature=?, status='paid', paid_amount=amount WHERE order_id=?");
-    $stmt->bind_param("sss", $payment_id, $signature, $order_id);
+    $stmt = $conn->prepare("UPDATE orders SET payment_id=?, payment_signature=?, status='paid', paid_amount=? WHERE order_id=?");
+    $stmt->bind_param("ssds", $payment_id, $signature, $data['amount'], $order_id);
     $stmt->execute();
 
     // Also insert into applications table
-    $stmt2 = $conn->prepare("INSERT INTO applications (order_id, name, email, phone, university, graduationYear, postUniversity, postGraduationYear, mastersPursuing, areaOfExpertise, programType, paymentAmount, rci, cvUpload, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')");
-    $stmt2->bind_param("ssssssssssssss",
-        $order_id,
-        $data['name'],
+    $stmt2 = $conn->prepare("INSERT INTO applications (name, email, phone, university, graduationYear, postUniversity, postGraduationYear, mastersPursuing, areaOfExpertise, programType, paymentAmount, rci, cvUpload, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new')");
+    $stmt2->bind_param("ssssssssssdss",
+        $data['fullName'],
         $data['email'],
         $data['phone'],
-        $data['university'],
+        $data['graduationCollege'],
         $data['graduationYear'],
-        $data['postUniversity'],
+        $data['postGraduationCollege'],
         $data['postGraduationYear'],
-        $data['mastersPursuing'],
-        $data['areaOfExpertise'],
+        $data['masters_program'],
+        $data['area_of_expertise'], // Note: other_expertise is not in the DB schema
         $data['programType'],
         $data['amount'],
-        $data['rci'],
-        $data['cvUpload']
+        $data['rciLicense'],
+        $data['resumeFileName']
     );
     $stmt2->execute();
 

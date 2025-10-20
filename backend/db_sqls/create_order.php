@@ -30,7 +30,7 @@ $order = json_decode($response, true);
 // Save preliminary order to DB (optional, for tracking)
 if (isset($order['id'])) {
     $stmt = $conn->prepare("INSERT INTO orders (order_id, amount, currency, program_type, customer_name, customer_email, customer_phone, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'created')");
-    $stmt->bind_param("sdsssss", $order['id'], $data['amount'], $order['currency'], $data['programType'], $data['name'], $data['email'], $data['phone']);
+    $stmt->bind_param("sdsssss", $order['id'], $data['programPrice'], $order['currency'], $data['programType'], $data['name'], $data['email'], $data['phone']);
     $stmt->execute();
 }
 

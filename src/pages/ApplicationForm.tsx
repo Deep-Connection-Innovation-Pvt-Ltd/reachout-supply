@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApplicationSteps } from "@/components/Application/ApplicationSteps";
 import PersonalDetails from "@/components/Application/PersonalDetails";
@@ -46,37 +46,76 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
         const basePrice = parseInt(planDetails[plan].price.replace(/,/g, ''), 10);
         const discountAmount = basePrice * 0.30;
         const total = basePrice - discountAmount;
-        return { total, formattedTotal: `₹${total.toLocaleString('en-IN')}` };
+        return { total, basePrice, formattedTotal: `₹${total.toLocaleString('en-IN')}` };
     }, [plan, planDetails]);
 
-    {/* This is where the Razorpay Payment Gateway will take information from */ }
+    // Load Razorpay script
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        document.body.appendChild(script);
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
+    const handlePayment = async () => {
+        // Step 1: Create an order on your backend
+        const orderResponse = await fetch('http://localhost/reachoutprof/backend/db_sqls/create_order.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                amount: paymentDetails.total,
+                programType: planDetails[plan].title,
+                programPrice: paymentDetails.basePrice,
+                name: formData.fullName,
+                email: formData.email,
+                phone: formData.phone,
+            }),
+        });
+        const orderData = await orderResponse.json();
 
-    const planName = plan === 'elite' ? 'Elite Mentorship Program' : 'Foundational Impact Program';
+        if (!orderData.id) {
+            alert("Error creating order. Please try again.");
+            return;
+        }
 
-    const handlePayment = () => {
-        const amountInPaise = paymentDetails.total * 100;
-
+        // Step 2: Open Razorpay Checkout
         const options = {
-            key: "rzp_test_rZe0zUGpvux0SS",
-            amount: amountInPaise,
+            key: "rzp_test_rZe0zUGpvux0SS", // Your public Razorpay Key
+            amount: orderData.amount,
             currency: "INR",
             name: "Deep Connection Innovation Pvt. Ltd.",
-            description: planName,
-            image: "./logo.png",
-            handler: function (response: any) {
+            description: planDetails[plan].title,
+            image: "/logo.png", // Ensure this path is correct from your public folder
+            order_id: orderData.id,
+            handler: async function (response: any) {
+                // Step 3: Verify payment on your backend
+                const verificationData = {
+                    ...formData,
+                    order_id: response.razorpay_order_id,
+                    payment_id: response.razorpay_payment_id,
+                    signature: response.razorpay_signature,
+                    programType: planDetails[plan].title,
+                    amount: paymentDetails.total,
+                    cvUpload: formData.resumeFileName, // Pass the filename
+                };
 
-                // When payment is successful
-                navigate("/payment_success", {
-                    state: {
-                        payment_id: response.razorpay_payment_id,
-                        amount: paymentDetails.total,
-                        name: formData.fullName,
-                        email: formData.email,
-                        contact: formData.phone,
-                        program: planName,
-                    },
+                const verifyResponse = await fetch('http://localhost/reachoutprof/backend/db_sqls/verify_payment.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(verificationData),
                 });
+
+                const verifyResult = await verifyResponse.json();
+
+                if (verifyResult.success) {
+                    // Step 4: Navigate to success page on successful verification
+                    navigate(`/payment_success?order_id=${response.razorpay_order_id}`);
+                } else {
+                    alert("Payment verification failed. Please contact support.");
+                }
             },
             prefill: {
                 name: formData.fullName,
@@ -94,8 +133,6 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
         const paymentObject = new (window as any).Razorpay(options);
         paymentObject.open();
     };
-
-
 
     const [formData, setFormData] = useState<FormData>({
         fullName: '',
