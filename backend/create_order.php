@@ -17,7 +17,7 @@ $orderData = [
 
 // Create Razorpay order using cURL
 $ch = curl_init('https://api.razorpay.com/v1/orders');
-curl_setopt($ch, CURLOPT_USERPWD, $razorpay_key . ':' . $razorpay_secret);
+curl_setopt($ch, CURLOPT_USERPWD, $razorpay_key_id . ':' . $razorpay_secret);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($orderData));
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -33,6 +33,9 @@ if (isset($order['id'])) {
     $stmt->bind_param("sdsssss", $order['id'], $data['programPrice'], $order['currency'], $data['programType'], $data['name'], $data['email'], $data['phone']);
     $stmt->execute();
 }
+
+// Add the public key_id to the response for the frontend
+$order['key_id'] = $razorpay_key_id;
 
 echo json_encode($order);
 ?>

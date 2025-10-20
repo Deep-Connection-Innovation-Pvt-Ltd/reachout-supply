@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApplicationSteps } from "@/components/Application/ApplicationSteps";
 import PersonalDetails from "@/components/Application/PersonalDetails";
@@ -62,7 +62,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const handlePayment = async () => {
         // Step 1: Create an order on your backend
-        const orderResponse = await fetch('http://localhost/reachoutprof/backend/db_sqls/create_order.php', {
+        const orderResponse = await fetch('http://localhost/reachoutprof/backend/create_order.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -83,7 +83,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
         // Step 2: Open Razorpay Checkout
         const options = {
-            key: "rzp_test_rZe0zUGpvux0SS", // Your public Razorpay Key
+            key: orderData.key_id, // Use the key from the backend
             amount: orderData.amount,
             currency: "INR",
             name: "Deep Connection Innovation Pvt. Ltd.",
@@ -92,20 +92,25 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
             order_id: orderData.id,
             handler: async function (response: any) {
                 // Step 3: Verify payment on your backend
-                const verificationData = {
-                    ...formData,
-                    order_id: response.razorpay_order_id,
-                    payment_id: response.razorpay_payment_id,
-                    signature: response.razorpay_signature,
-                    programType: planDetails[plan].title,
-                    amount: paymentDetails.total,
-                    cvUpload: formData.resumeFileName, // Pass the filename
-                };
+                const postData = new FormData();
 
-                const verifyResponse = await fetch('http://localhost/reachoutprof/backend/db_sqls/verify_payment.php', {
+                // Append all form data fields
+                for (const key in formData) {
+                    if (key === 'resume' && formData.resume) {
+                        postData.append('resume', formData.resume, formData.resumeFileName);
+                    } else {
+                        postData.append(key, (formData as any)[key]);
+                    }
+                }
+                postData.append('order_id', response.razorpay_order_id);
+                postData.append('payment_id', response.razorpay_payment_id);
+                postData.append('signature', response.razorpay_signature);
+                postData.append('programType', planDetails[plan].title);
+                postData.append('amount', String(paymentDetails.total));
+
+                const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(verificationData),
+                    body: postData, // The browser will set the Content-Type to multipart/form-data
                 });
 
                 const verifyResult = await verifyResponse.json();
