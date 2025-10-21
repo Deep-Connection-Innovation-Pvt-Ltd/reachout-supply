@@ -150,7 +150,7 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleStatusChange = async (order_id: number, newStatus: string, isNewApplication: boolean) => {
+    const handleStatusChange = async (order_id: number, newStatus: string) => {
         // Optimistically update the UI
         setNewApplications(prev => 
             prev.map(app => 
@@ -359,7 +359,7 @@ export default function AdminDashboard() {
                                 </TableCell>
                                 <TableCell>
                                     <Select
-                                        onValueChange={(value) => handleStatusChange(app.order_id, value, isNew)}
+                                        onValueChange={(value) => handleStatusChange(app.order_id, value)}
                                         value={app.status}
                                     >
                                         <SelectTrigger className="w-[180px]">
