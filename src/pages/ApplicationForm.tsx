@@ -169,7 +169,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const steps = useMemo(() => [
         {
-            title: "Personal Info",
+            title: "Personal Informations",
             description: "Basic details",
             path: "personal-details"
         },
