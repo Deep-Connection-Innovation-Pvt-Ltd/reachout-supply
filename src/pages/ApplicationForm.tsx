@@ -41,6 +41,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
     const { title } = planDetails[plan];
 
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [isStepValid, setIsStepValid] = useState(false);
 
     const paymentDetails = useMemo(() => {
         const basePrice = parseInt(planDetails[plan].price.replace(/,/g, ''), 10);
@@ -63,6 +64,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
     const handlePayment = async () => {
         // Step 1: Create an order on your backend
         const orderResponse = await fetch('http://localhost/reachoutprof/backend/create_order.php', {
+                // const orderResponse = await fetch('/professional/backend/create_order.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -111,6 +113,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
                 try {
                     // Use relative URL to avoid CORS issues
                 const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
+                // const verifyResponse = await fetch('/professional/backend/verify_payment.php', {
                         method: 'POST',
                         body: postData, // The browser will set the Content-Type to multipart/form-data
                         credentials: 'include' // Important for cookies, authorization headers with HTTPS
@@ -187,6 +190,45 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const currentStepIndex = steps.findIndex(s => s.path === step);
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+
+    // Validate form data whenever it changes
+    useEffect(() => {
+        const validateStep = () => {
+            switch (step) {
+                case "personal-details": {
+                    const { fullName, email, phone, rciLicense, graduationCollege, graduationYear, postGraduationCollege, postGraduationYear } = formData;
+                    // Regex for validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    const phoneRegex = /^\d{10,15}$/; // 10 to 15 digits
+                    const yearRegex = /^\d{4}$/; // 4-digit year
+
+                    return fullName.trim() !== '' &&
+                           emailRegex.test(email) &&
+                           phoneRegex.test(phone.trim()) &&
+                           rciLicense.trim() !== '' &&
+                           graduationCollege.trim() !== '' &&
+                           yearRegex.test(graduationYear.trim()) &&
+                           postGraduationCollege.trim() !== '' &&
+                           yearRegex.test(postGraduationYear.trim());
+                }
+                case "academic-details": {
+                    const { masters_program, area_of_expertise, other_expertise, resume } = formData;
+                    if (area_of_expertise === 'Others (please specify)') {
+                        return masters_program.trim() !== '' &&
+                               area_of_expertise.trim() !== '' &&
+                               other_expertise.trim() !== '' &&
+                               resume !== null;
+                    }
+                    return masters_program.trim() !== '' &&
+                           area_of_expertise.trim() !== '' &&
+                           resume !== null;
+                }
+                default:
+                    return true; // No validation for other steps
+            }
+        };
+        setIsStepValid(validateStep());
+    }, [formData, step]);
 
     // Redirect to the first step if no step is provided or an invalid step is in the URL
     useEffect(() => {
@@ -274,6 +316,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
                     ) : (
                         <Button
                             onClick={handleNext}
+                            disabled={!isStepValid}
                         >
                             Next
                         </Button>

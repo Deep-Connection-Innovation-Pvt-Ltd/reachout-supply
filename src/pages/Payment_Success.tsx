@@ -12,6 +12,7 @@ export default function PaymentSuccess() {
 
   useEffect(() => {
     fetch(`http://localhost/reachoutprof/backend/fetch_payment.php?order_id=${order_id}`)
+        // fetch(`/professional/backend/fetch_payment.php?order_id=${order_id}`)
       .then((res) => res.json())
       .then((response) => {
         if (response.success && response.data) {
