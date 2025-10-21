@@ -13,7 +13,16 @@ export default function PaymentSuccess() {
   useEffect(() => {
     fetch(`http://localhost/reachoutprof/backend/fetch_payment.php?order_id=${order_id}`)
       .then((res) => res.json())
-      .then((d) => setData(d));
+      .then((response) => {
+        if (response.success && response.data) {
+          setData(response.data);
+        } else {
+          console.error('Failed to load payment details:', response.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching payment details:', error);
+      });
   }, [order_id]);
 
   if (!data)

@@ -1,7 +1,20 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Content-Type: application/json");
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set CORS headers
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
+header('Content-Type: application/json; charset=UTF-8');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 include 'config.php';
 
@@ -37,31 +50,37 @@ try {
     }
 
     // Start transaction
-    $conn->begin_transaction();
+    $pdo->beginTransaction();
 
     try {
         // Update order details
-        $stmt = $conn->prepare("UPDATE orders SET payment_id = ?, payment_signature = ?, status = 'paid', paid_amount = ?, updated_at = NOW() WHERE order_id = ?");
-        if (!$stmt) {
-            throw new Exception('Failed to prepare order update statement: ' . $conn->error);
-        }
+        $stmt = $pdo->prepare("UPDATE orders SET payment_id = :payment_id, payment_signature = :signature, status = 'paid', paid_amount = :amount, updated_at = NOW() WHERE order_id = :order_id");
         
-        $stmt->bind_param("ssds", $payment_id, $signature, $amount, $order_id);
-        if (!$stmt->execute()) {
+        $stmt->execute([
+            ':payment_id' => $payment_id,
+            ':signature' => $signature,
+            ':amount' => $amount,
+            ':order_id' => $order_id
+        ]);
+        
+        if ($stmt->rowCount() === 0) {
             throw new Exception('Failed to update order: ' . $stmt->error);
         }
-        $stmt->close();
-
         // Insert into applications table
-        $stmt2 = $conn->prepare("INSERT INTO applications (
+        $stmt2 = $pdo->prepare("INSERT INTO applications (
             name, email, phone, university, graduationYear, 
             postUniversity, postGraduationYear, mastersPursuing, 
             areaOfExpertise, programType, paymentAmount, rci, 
             cvUpload, status, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', NOW(), NOW())");
+        ) VALUES (
+            :name, :email, :phone, :university, :graduationYear, 
+            :postUniversity, :postGraduationYear, :mastersPursuing, 
+            :areaOfExpertise, :programType, :paymentAmount, :rciLicense, 
+            :resumeFileName, 'new', NOW(), NOW()
+        )");
 
         if (!$stmt2) {
-            throw new Exception('Failed to prepare application insert statement: ' . $conn->error);
+            throw new Exception('Failed to prepare application insert statement.');
         }
 
         // Handle file upload
@@ -129,31 +148,24 @@ try {
             'resumeFileName' => $resumePath // Use the processed file path
         ];
 
-        // Bind parameters
-        $stmt2->bind_param(
-            "ssssssssssdss",
-            $formData['fullName'],
-            $formData['email'],
-            $formData['phone'],
-            $formData['graduationCollege'],
-            $formData['graduationYear'],
-            $formData['postGraduationCollege'],
-            $formData['postGraduationYear'],
-            $formData['masters_program'],
-            $formData['area_of_expertise'],
-            $formData['programType'],
-            $amount,
-            $formData['rciLicense'],
-            $formData['resumeFileName']
-        );
-
-        if (!$stmt2->execute()) {
-            throw new Exception('Failed to insert application: ' . $stmt2->error);
-        }
-        $stmt2->close();
+        $stmt2->execute([
+            ':name' => $formData['fullName'],
+            ':email' => $formData['email'],
+            ':phone' => $formData['phone'],
+            ':university' => $formData['graduationCollege'],
+            ':graduationYear' => $formData['graduationYear'],
+            ':postUniversity' => $formData['postGraduationCollege'],
+            ':postGraduationYear' => $formData['postGraduationYear'],
+            ':mastersPursuing' => $formData['masters_program'],
+            ':areaOfExpertise' => $formData['area_of_expertise'],
+            ':programType' => $formData['programType'],
+            ':paymentAmount' => $amount,
+            ':rciLicense' => $formData['rciLicense'],
+            ':resumeFileName' => $formData['resumeFileName']
+        ]);
 
         // Commit transaction
-        $conn->commit();
+        $pdo->commit();
 
         $response = [
             'success' => true,
@@ -162,8 +174,10 @@ try {
         ];
 
     } catch (Exception $e) {
-        // Rollback transaction on error
-        $conn->rollback();
+// Rollback transaction on error
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         throw $e;
     }
 

@@ -1,7 +1,20 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set CORS headers
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
+header('Content-Type: application/json; charset=UTF-8');
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 include 'config.php';
 
@@ -29,9 +42,16 @@ $order = json_decode($response, true);
 
 // Save preliminary order to DB (optional, for tracking)
 if (isset($order['id'])) {
-    $stmt = $conn->prepare("INSERT INTO orders (order_id, amount, currency, program_type, customer_name, customer_email, customer_phone, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'created')");
-    $stmt->bind_param("sdsssss", $order['id'], $data['programPrice'], $order['currency'], $data['programType'], $data['name'], $data['email'], $data['phone']);
-    $stmt->execute();
+    $stmt = $pdo->prepare("INSERT INTO orders (order_id, amount, currency, program_type, customer_name, customer_email, customer_phone, status) VALUES (:order_id, :amount, :currency, :program_type, :customer_name, :customer_email, :customer_phone, 'created')");
+    $stmt->execute([
+        ':order_id' => $order['id'],
+        ':amount' => $data['programPrice'],
+        ':currency' => $order['currency'],
+        ':program_type' => $data['programType'],
+        ':customer_name' => $data['name'],
+        ':customer_email' => $data['email'],
+        ':customer_phone' => $data['phone']
+    ]);
 }
 
 // Add the public key_id to the response for the frontend

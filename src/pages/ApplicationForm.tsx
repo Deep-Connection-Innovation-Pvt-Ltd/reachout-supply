@@ -88,7 +88,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
             currency: "INR",
             name: "Deep Connection Innovation Pvt. Ltd.",
             description: planDetails[plan].title,
-            image: "/logo.png", // Ensure this path is correct from your public folder
+            // Removed image to avoid CORS issues in development
             order_id: orderData.id,
             handler: async function (response: any) {
                 // Step 3: Verify payment on your backend
@@ -108,18 +108,30 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
                 postData.append('programType', planDetails[plan].title);
                 postData.append('amount', String(paymentDetails.total));
 
+                try {
+                    // Use relative URL to avoid CORS issues
                 const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
-                    method: 'POST',
-                    body: postData, // The browser will set the Content-Type to multipart/form-data
-                });
+                        method: 'POST',
+                        body: postData, // The browser will set the Content-Type to multipart/form-data
+                        credentials: 'include' // Important for cookies, authorization headers with HTTPS
+                    });
 
-                const verifyResult = await verifyResponse.json();
+                    if (!verifyResponse.ok) {
+                        throw new Error(`HTTP error! status: ${verifyResponse.status}`);
+                    }
 
-                if (verifyResult.success) {
-                    // Step 4: Navigate to success page on successful verification
-                    navigate(`/payment_success?order_id=${response.razorpay_order_id}`);
-                } else {
-                    alert("Payment verification failed. Please contact support.");
+                    const verifyResult = await verifyResponse.json();
+
+                    if (verifyResult.success) {
+                        // Step 4: Navigate to success page on successful verification
+                        navigate(`/payment_success?order_id=${response.razorpay_order_id}`);
+                    } else {
+                        throw new Error(verifyResult.error || 'Payment verification failed');
+                    }
+                } catch (error: unknown) {
+                    console.error('Payment verification error:', error);
+                    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+                    alert(`Payment verification failed: ${errorMessage}. Please contact support.`);
                 }
             },
             prefill: {
