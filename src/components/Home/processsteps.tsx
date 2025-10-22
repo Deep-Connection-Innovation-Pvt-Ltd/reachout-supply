@@ -1,7 +1,15 @@
+import { useState, useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import Glory from '../../assets/glory.png';
 
 export default function ProcessSteps() {
+    const [applicationsCount, setApplicationsCount] = useState(0);
+useEffect(() => {
+    // Generate a random number between 10 and 20
+    const randomNum = Math.floor(Math.random() * 11) + 10;
+    setApplicationsCount(randomNum);
+}, []);
+
     const steps = [
         {
             number: 1,
@@ -19,6 +27,8 @@ export default function ProcessSteps() {
             description: "Start your practice with real clients right away."
         }
     ];
+
+    
     return (
         <div className="max-w-4xl mx-auto mb-16">
             <h3 className="text-2xl sm:text-3xl font-bold text-center text-foreground mb-8">
@@ -43,7 +53,10 @@ export default function ProcessSteps() {
             <div className="mt-8 text-center">
                 <div className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full shadow-glow animate-pulse-glow">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
-                    <span className="text-sm font-semibold">12 applications received in the last hour</span>
+                    <span className="text-sm font-semibold">
+    {applicationsCount} applications received in the last hour
+</span>
+                    {/* <span className="text-sm font-semibold">12 applications received in the last hour</span> */}
                 </div>
             </div>
 

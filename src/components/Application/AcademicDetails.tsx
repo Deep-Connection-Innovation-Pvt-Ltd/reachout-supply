@@ -123,7 +123,7 @@ export default function AcademicDetails({ data, onDataChange }: AcademicDetailsP
                             {/* CV/Resume Upload */}
                             <div className="space-y-2 md:col-span-2">
                                 <Label htmlFor="resume">Upload CV/Resume <span className="text-red-500">*</span></Label>
-                                <div className={`flex items-center justify-center w-full p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 ${errors.resume ? 'border-red-500' : 'border-border'}`}>
+                                <div className={`flex items-center justify-center w-full p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 ${errors.resume ? 'border-red-500' : data.resume ? 'border-green-500' : 'border-border'}`}>
                                     <label htmlFor="resume-upload" className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
                                         <UploadCloud className="w-8 h-8 mb-2 text-muted-foreground" />
                                         <p className="mb-1 text-sm text-muted-foreground">
@@ -132,12 +132,25 @@ export default function AcademicDetails({ data, onDataChange }: AcademicDetailsP
                                         <p className="text-xs text-muted-foreground">PDF, DOC, DOCX (MAX. 5MB)</p>
                                         {data.resumeFileName && <p className="mt-2 text-sm font-medium text-primary">{data.resumeFileName}</p>}
                                     </label>
-                                    <Input id="resume-upload" type="file" className="hidden" accept=".pdf,.doc,.docx" onChange={(e) => {
-                                        const file = e.target.files?.[0] || null;
-                                        onDataChange({ resume: file });
-                                        onDataChange({ resumeFileName: file ? file.name : '' });
-                                        validateField("resume", file ? file.name : "");
-                                    }} />
+                                    <Input 
+                                        id="resume-upload" 
+                                        type="file" 
+                                        className="hidden" 
+                                        accept=".pdf,.doc,.docx" 
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0] || null;
+                                            onDataChange({ 
+                                                resume: file,
+                                                resumeFileName: file ? file.name : ''
+                                            });
+                                            // Clear any existing error when a file is selected
+                                            if (file) {
+                                                setErrors(prev => ({ ...prev, resume: '' }));
+                                            } else {
+                                                validateField("resume", "");
+                                            }
+                                        }} 
+                                    />
                                 </div>
                                 {errors.resume && <p className="text-sm text-red-500">{errors.resume}</p>}
                             </div>

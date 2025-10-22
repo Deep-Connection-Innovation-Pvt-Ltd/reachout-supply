@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "start": "vite preview --port 3000",
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "homepage": "/professional",
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-label": "^2.1.7",
