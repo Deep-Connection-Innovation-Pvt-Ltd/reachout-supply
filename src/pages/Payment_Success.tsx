@@ -11,7 +11,8 @@ export default function PaymentSuccess() {
   const order_id = searchParams.get("order_id");
 
   useEffect(() => {
-    fetch(`http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_payment.php?order_id=${order_id}`)
+
+    fetch(`http://localhost/reachoutprof/backend/fetch_payment.php?order_id=${order_id}`)
         // fetch(`/professional/backend/fetch_payment.php?order_id=${order_id}`)
       .then((res) => res.json())
       .then((response) => {

@@ -63,7 +63,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const handlePayment = async () => {
         // Step 1: Create an order on your backend
-        const orderResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/create_order.php', {
+        const orderResponse = await fetch('http://localhost/reachoutprof/backend/create_order.php', {
                 // const orderResponse = await fetch('/professional/backend/create_order.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -112,7 +112,8 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
                 try {
                     // Use relative URL to avoid CORS issues
-                const verifyResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/verify_payment.php', {
+
+                const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
                 // const verifyResponse = await fetch('/professional/backend/verify_payment.php', {
                         method: 'POST',
                         body: postData, // The browser will set the Content-Type to multipart/form-data
