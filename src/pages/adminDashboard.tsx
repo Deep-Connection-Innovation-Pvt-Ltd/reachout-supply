@@ -110,8 +110,8 @@ export default function AdminDashboard() {
         try {
             // Fetch new applications
 
-            const newResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=new', {
-            // const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
+            // const newResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=new', {
+            const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -131,8 +131,8 @@ export default function AdminDashboard() {
 
             // Fetch updated applications
 
-            const updatedResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=updated', {
-            // const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
+            // const updatedResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=updated', {
+            const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -174,8 +174,8 @@ export default function AdminDashboard() {
 
         try {
 
-            const response = await fetch('http://localhost/reachoutprof/backend/update_application_status.php', {
-         // const response = await fetch('/professional/backend/update_application_status.php', {
+            // const response = await fetch('http://localhost/reachoutprof/backend/update_application_status.php', {
+         const response = await fetch('/professional/backend/update_application_status.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -371,10 +371,10 @@ export default function AdminDashboard() {
                                 <TableCell>{app.rci}</TableCell>
                                 <TableCell>
                                     {app.cvUpload ? (
-<!--                                         // <a href={`/professional/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                    // <a href={`/professional/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                         //     View CV
                                         // </a>
-                                         <a href={`/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline"> -->
+                                        //  <a href={`/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                         <a href={`/professional/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                             View CV
                                         </a>
