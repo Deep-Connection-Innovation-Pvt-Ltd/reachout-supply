@@ -16,8 +16,8 @@ export default function AdminLogin() {
         setError(''); // Clear previous errors
 
         try {
-            const response = await fetch('http://localhost/reachoutprof/backend/admin_login.php', {
-            // const response = await fetch('/professional/backend/admin_login.php', {
+            // const response = await fetch('http://localhost/reachoutprof/backend/admin_login.php', {
+            const response = await fetch('/professional/backend/admin_login.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

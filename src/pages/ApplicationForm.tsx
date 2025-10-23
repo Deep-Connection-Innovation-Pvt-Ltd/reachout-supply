@@ -63,8 +63,8 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const handlePayment = async () => {
         // Step 1: Create an order on your backend
-        const orderResponse = await fetch('http://localhost/reachoutprof/backend/create_order.php', {
-                // const orderResponse = await fetch('/professional/backend/create_order.php', {
+        // const orderResponse = await fetch('http://localhost/reachoutprof/backend/create_order.php', {
+                const orderResponse = await fetch('/professional/backend/create_order.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -95,13 +95,19 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
             handler: async function (response: any) {
                 // Step 3: Verify payment on your backend
                 const postData = new FormData();
+                const finalFormData = { ...formData };
+
+                // If 'Others' is selected for expertise, use the specified value
+                if (finalFormData.area_of_expertise === 'Others (please specify)') {
+                    finalFormData.area_of_expertise = finalFormData.other_expertise;
+                }
 
                 // Append all form data fields
-                for (const key in formData) {
-                    if (key === 'resume' && formData.resume) {
-                        postData.append('resume', formData.resume, formData.resumeFileName);
+                for (const key in finalFormData) {
+                    if (key === 'resume' && finalFormData.resume) {
+                        postData.append('resume', finalFormData.resume, finalFormData.resumeFileName);
                     } else {
-                        postData.append(key, (formData as any)[key]);
+                        postData.append(key, (finalFormData as any)[key]);
                     }
                 }
                 postData.append('order_id', response.razorpay_order_id);
@@ -112,9 +118,8 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
                 try {
                     // Use relative URL to avoid CORS issues
-
-                const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
-                // const verifyResponse = await fetch('/professional/backend/verify_payment.php', {
+                // const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
+                const verifyResponse = await fetch('/professional/backend/verify_payment.php', {
                         method: 'POST',
                         body: postData, // The browser will set the Content-Type to multipart/form-data
                         credentials: 'include' // Important for cookies, authorization headers with HTTPS
@@ -173,7 +178,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const steps = useMemo(() => [
         {
-            title: "Personal Informations",
+            title: "Personal Info",
             description: "Basic details",
             path: "personal-details"
         },
