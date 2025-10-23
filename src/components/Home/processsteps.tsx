@@ -54,8 +54,8 @@ useEffect(() => {
                 <div className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full shadow-glow animate-pulse-glow">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
                     <span className="text-sm font-semibold">
-    {applicationsCount} applications received in the last hour
-</span>
+                  {applicationsCount} applications received in the last hour
+                 </span>
                     {/* <span className="text-sm font-semibold">12 applications received in the last hour</span> */}
                 </div>
             </div>
