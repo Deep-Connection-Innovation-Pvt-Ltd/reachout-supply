@@ -109,6 +109,7 @@ export default function AdminDashboard() {
     const fetchApplications = async () => {
         try {
             // Fetch new applications
+
             const newResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=new', {
             // const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
                 credentials: 'include' // Include cookies for session
@@ -129,6 +130,7 @@ export default function AdminDashboard() {
             }
 
             // Fetch updated applications
+
             const updatedResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=updated', {
             // const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
                 credentials: 'include' // Include cookies for session
@@ -171,8 +173,9 @@ export default function AdminDashboard() {
         );
 
         try {
+
             const response = await fetch('http://localhost/reachoutprof/backend/update_application_status.php', {
-                        // const response = await fetch('/professional/backend/update_application_status.php', {
+         // const response = await fetch('/professional/backend/update_application_status.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -206,12 +209,27 @@ export default function AdminDashboard() {
 
     // Calculate statistics
     const totalApplications = newApplications.length + updatedApplications.length;
-    const foundationalCount = [...newApplications, ...updatedApplications]
+    const allApplications = [...newApplications, ...updatedApplications];
+    const foundationalCount = allApplications
         .filter(app => app.programType === 'Foundational Impact Program').length;
-    const eliteCount = [...newApplications, ...updatedApplications]
+    const eliteCount = allApplications
         .filter(app => app.programType === 'Elite Mentorship Program').length;
-    const totalAmountRaised = [...newApplications, ...updatedApplications]
-        .reduce((sum, app) => sum + (app.paymentAmount || 0), 0);
+        
+    // Calculate total amount raised, ensuring we parse paymentAmount as a number
+    const totalAmountRaised = allApplications.reduce((sum, app) => {
+        const amount = typeof app.paymentAmount === 'string' 
+            ? parseFloat(app.paymentAmount) || 0 
+            : (app.paymentAmount || 0);
+        return sum + amount;
+    }, 0);
+    
+    // For debugging
+    console.log('Payment amounts:', allApplications.map(app => ({
+        id: app.order_id,
+        amount: app.paymentAmount,
+        type: app.programType
+    })));
+    console.log('Total calculated amount:', totalAmountRaised);
 
     // Prepare data for export
     const prepareExportData = (applications: Application[]) => {
@@ -353,6 +371,10 @@ export default function AdminDashboard() {
                                 <TableCell>{app.rci}</TableCell>
                                 <TableCell>
                                     {app.cvUpload ? (
+<!--                                         // <a href={`/professional/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        //     View CV
+                                        // </a>
+                                         <a href={`/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline"> -->
                                         <a href={`/professional/backend/${app.cvUpload}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                                             View CV
                                         </a>
@@ -507,7 +529,7 @@ export default function AdminDashboard() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm font-medium text-gray-500">Total Amount Raised</p>
-                            <p className="text-2xl font-bold">₹{totalAmountRaised.toLocaleString('en-IN')}</p>
+                            <p className="text-2xl font-bold">₹{totalAmountRaised.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                         </div>
                         <div className="p-3 rounded-full bg-green-100 text-green-600">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

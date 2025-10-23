@@ -112,6 +112,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
                 try {
                     // Use relative URL to avoid CORS issues
+
                 const verifyResponse = await fetch('http://localhost/reachoutprof/backend/verify_payment.php', {
                 // const verifyResponse = await fetch('/professional/backend/verify_payment.php', {
                         method: 'POST',
@@ -172,7 +173,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const steps = useMemo(() => [
         {
-            title: "Personal Info",
+            title: "Personal Informations",
             description: "Basic details",
             path: "personal-details"
         },
