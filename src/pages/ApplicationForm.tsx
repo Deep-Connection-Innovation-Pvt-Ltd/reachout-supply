@@ -47,6 +47,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
     const paymentDetails = useMemo(() => {
         const basePrice = parseInt(planDetails[plan].price.replace(/,/g, ''), 10);
         const discountAmount = basePrice * 0.30;
+        console.log('discount amount is', discountAmount);
         const total = basePrice - discountAmount;
         return { total, basePrice, formattedTotal: `₹${total.toLocaleString('en-IN')}` };
     }, [plan, planDetails]);
@@ -65,7 +66,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
     const handlePayment = async () => {
         // Step 1: Create an order on your backend
          const orderResponse = await fetch(API.CREATE_ORDER, {
-          //      const orderResponse = await fetch('/professional/backend/create_order.php', {
+          //const orderResponse = await fetch('/professional/backend/create_order.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -78,6 +79,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
             }),
         });
         const orderData = await orderResponse.json();
+        console.log('orderData is ',orderData);
 
         if (!orderData.id) {
             alert("Error creating order. Please try again.");

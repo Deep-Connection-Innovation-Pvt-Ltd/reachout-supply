@@ -94,6 +94,7 @@ export default function AdminDashboard() {
         { value: 'interviewed', label: 'Interviewed' },
         { value: 'accepted', label: 'Accepted' },
         { value: 'rejected', label: 'Rejected' },
+        { value: 'selected', label: 'Selected' },
         { value: 'completed', label: 'Completed' }
     ];
     
