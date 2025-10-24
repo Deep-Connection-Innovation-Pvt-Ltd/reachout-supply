@@ -174,8 +174,8 @@ export default function AdminDashboard() {
 
         try {
 
-            // const response = await fetch('http://localhost/reachoutprof/backend/update_application_status.php', {
-         const response = await fetch('/professional/backend/update_application_status.php', {
+             const response = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/update_application_status.php', {
+       //  const response = await fetch('/professional/backend/update_application_status.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
