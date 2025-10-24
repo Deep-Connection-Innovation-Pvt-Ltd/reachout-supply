@@ -110,8 +110,8 @@ export default function AdminDashboard() {
         try {
             // Fetch new applications
 
-            // const newResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=new', {
-            const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
+             const newResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_applications.php?status=new', {
+            //const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -131,8 +131,8 @@ export default function AdminDashboard() {
 
             // Fetch updated applications
 
-            // const updatedResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=updated', {
-            const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
+             const updatedResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_applications.php?status=updated', {
+          //  const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
                 credentials: 'include' // Include cookies for session
             });
             

@@ -10,7 +10,8 @@ import AdminDashboard from './pages/adminDashboard';
 function App() {
   return (
     <>
-      <BrowserRouter basename="/professional">
+      {/* <BrowserRouter basename="/professional"> */}
+        <BrowserRouter basename="/">
 
         <Routes>
           <Route path="/" element={<HomePage />} />
