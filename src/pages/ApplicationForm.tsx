@@ -47,7 +47,6 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
     const paymentDetails = useMemo(() => {
         const basePrice = parseInt(planDetails[plan].price.replace(/,/g, ''), 10);
         const discountAmount = basePrice * 0.30;
-        console.log('discount amount is', discountAmount);
         const total = basePrice - discountAmount;
         return { total, basePrice, formattedTotal: `₹${total.toLocaleString('en-IN')}` };
     }, [plan, planDetails]);

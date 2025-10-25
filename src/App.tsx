@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PaymentSuccess from './pages/Payment_Success';
 import AdminLogin from './pages/adminLogin';
 import AdminDashboard from './pages/adminDashboard';
+import ExcelImport from "./components/Admin/ExcelImport";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/payment_success" element={<PaymentSuccess/>} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/excel-import" element={<ExcelImport />} />
         </Routes>
       </BrowserRouter>
     </>
