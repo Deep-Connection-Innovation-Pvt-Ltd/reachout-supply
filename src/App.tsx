@@ -12,7 +12,8 @@ function App() {
   return (
     <>
 
-      <BrowserRouter basename="/professional">
+      {/* <BrowserRouter basename="/professional"> */}
+      <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/apply-elite/:step" element={<ApplicationForm plan="elite" />} />
