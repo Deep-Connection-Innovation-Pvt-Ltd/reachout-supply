@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import API from '../config/api';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
@@ -16,8 +17,8 @@ export default function AdminLogin() {
         setError(''); // Clear previous errors
 
         try {
-            // const response = await fetch('http://localhost/reachoutprof/backend/admin_login.php', {
-            const response = await fetch('/professional/backend/admin_login.php', {
+
+           const response = await fetch(API.ADMIN_LOGIN, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

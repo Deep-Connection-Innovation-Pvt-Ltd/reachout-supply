@@ -3,7 +3,11 @@ import { Button } from '../ui/button';
 export default function Navbar() {
     return (
         <>
-            <div className="flex justify-between w-full items-center bg-background px-[80px] py-[16px] sticky top-0 z-99">
+            {/* Changed px-[80px] to px-4 for mobile (default) 
+              and then used sm:px-[80px] to apply the larger padding 
+              only on small screens and up.
+            */}
+            <div className="flex justify-between w-full items-center bg-background px-4 sm:px-[80px] py-[16px] sticky top-0 z-99">
                 <img
                     src="../ReachOut.png"
                     alt="ReachOut Logo"
@@ -17,7 +21,9 @@ export default function Navbar() {
                         }
                     }}
                     size="default"
-                    className="px-4 sm:px-6 py-3 cursor-pointer text-sm sm:text-base min-h-[44px]">
+                    // Removed extra padding/sizing classes from button for simplicity
+                    // or you could adjust them like `px-3 sm:px-6` if needed.
+                    className="px-4 py-3 cursor-pointer text-sm min-h-[44px]">
                     Join Founding Cohort
                 </Button>
             </div>

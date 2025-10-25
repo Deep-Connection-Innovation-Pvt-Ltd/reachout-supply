@@ -12,7 +12,7 @@ const testimonials = [
   {
     name: "Sumbul",
     role: "Rehabilitation Psychologist",
-    text: "psychology is one of those fields where you get better with practice and reach out has provided exactly that. When you're fresh out of college you're kinda clueless with only few Observations from internships to go off of. But this platform took us beyond the threshold of mere observations and offered real experience.",
+    text: "psychology is one of those fields where you get better with practice and reach out has provided exactly that. When you're fresh out of college you're kinda clueless with only few observations from internships to go off of. But this platform took us beyond the threshold of mere observations and offered real experience.",
     rating: 5,
     cohort: "Current Member",
     Img: sumbulImg
@@ -133,7 +133,7 @@ export default function Reviews(){
                 pricingSection.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full shadow-glow animate-pulse-glow hover:opacity-90 transition-opacity cursor-pointer"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded shadow-glow animate-pulse-glow hover:opacity-90 transition-opacity cursor-pointer"
           >
             <span className="text-sm font-semibold">Join Founding Cohort</span>
           </button>
