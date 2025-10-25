@@ -38,8 +38,8 @@ try {
 
     // Prepare insert statement for the applications table
     $stmt = $pdo->prepare("
-        INSERT INTO applications (name, email, phone, job_id, status, created_at)
-        VALUES (:name, :email, :phone, :job_id, :status, NOW())
+        INSERT INTO applications (name, email, phone,  status, created_at)
+        VALUES (:name, :email, :phone,  :status, NOW())
     ");
 
     $inserted = 0;
@@ -48,7 +48,7 @@ try {
         $name = trim($r['name'] ?? '');
         $email = trim($r['email'] ?? '');
         $phone = trim($r['phone'] ?? '');
-        $job_id = isset($r['job_id']) && $r['job_id'] !== '' ? intval($r['job_id']) : null;
+    //  $job_id = isset($r['job_id']) && $r['job_id'] !== '' ? intval($r['job_id']) : null;
         $status = $r['status'] ?? 'new';
 
         // Skip invalid rows
@@ -57,7 +57,7 @@ try {
         }
 
         // Optional: check for duplicate emails
-        $check = $pdo->prepare("SELECT id FROM applications WHERE email = :email LIMIT 1");
+        $check = $pdo->prepare("SELECT order_id FROM applications WHERE email = :email LIMIT 1");
         $check->execute(['email' => $email]);
         if ($check->fetch()) {
             continue; // skip duplicates
@@ -68,7 +68,7 @@ try {
             ':name' => $name ?: null,
             ':email' => $email ?: null,
             ':phone' => $phone ?: null,
-            ':job_id' => $job_id,
+            // ':job_id' => $job_id,
             ':status' => $status,
         ]);
 
