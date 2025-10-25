@@ -10,9 +10,8 @@ import AdminDashboard from './pages/adminDashboard';
 function App() {
   return (
     <>
-      {/* <BrowserRouter basename="/professional"> */}
-        <BrowserRouter basename="/">
 
+      <BrowserRouter basename="/professional">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/apply-elite/:step" element={<ApplicationForm plan="elite" />} />
