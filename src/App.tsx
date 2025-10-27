@@ -11,7 +11,6 @@ import ExcelImport from "./components/Admin/ExcelImport";
 function App() {
   return (
     <>
-
       {/* <BrowserRouter basename="/professional"> */}
       <BrowserRouter basename="/">
         <Routes>
