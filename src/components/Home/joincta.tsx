@@ -17,7 +17,7 @@ export default function JoinCTA() {
                     <Button
                         size="lg"
                         variant="secondary"
-                        className="px-12 sm:px-16 py-4 text-base sm:text-lg min-h-[56px] cursor-pointer"
+                        className="px-12 sm:px-16 py-4 text-base sm:text-lg min-h-[56px] cursor-pointer foundational-cohort"
                         onClick={() => {
                             const pricingSection = document.getElementById('programs');
                             if (pricingSection) {

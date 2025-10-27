@@ -1,4 +1,6 @@
 import './App.css'
+import { useEffect } from 'react';
+import { initAnalytics } from './utils/analytics';
 import HomePage from './pages/HomePage';
 import ApplicationForm from './pages/ApplicationForm';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -9,10 +11,13 @@ import ExcelImport from "./components/Admin/ExcelImport";
 
 
 function App() {
+  useEffect(() =>{
+    initAnalytics();
+  },[]);
   return (
     <>
-      {/* <BrowserRouter basename="/professional"> */}
-      <BrowserRouter basename="/">
+       <BrowserRouter basename="/professional"> 
+      {/* <BrowserRouter basename="/"> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/apply-elite/:step" element={<ApplicationForm plan="elite" />} />
