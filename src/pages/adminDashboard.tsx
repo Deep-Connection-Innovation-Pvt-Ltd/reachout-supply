@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'; // Assuming you have a tabs component
 import {
@@ -111,8 +111,8 @@ export default function AdminDashboard() {
         try {
             // Fetch new applications
 
-            // const newResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=new', {
-            const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
+             const newResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_applications.php?status=new', {
+            //const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -132,8 +132,8 @@ export default function AdminDashboard() {
 
             // Fetch updated applications
 
-            // const updatedResponse = await fetch('http://localhost/reachoutprof/backend/fetch_applications.php?status=updated', {
-            const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
+             const updatedResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_applications.php?status=updated', {
+           //  const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -175,8 +175,8 @@ export default function AdminDashboard() {
 
         try {
 
-            // const response = await fetch('http://localhost/reachoutprof/backend/update_application_status.php', {
-         const response = await fetch('/professional/backend/update_application_status.php', {
+             const response = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/update_application_status.php', {
+        // const response = await fetch('/professional/backend/update_application_status.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -300,7 +300,13 @@ export default function AdminDashboard() {
                 </select>
             </div>
             <div className="flex items-end">
-                <Button 
+                   <Button  variant="outline"
+                    className="h-[42px]" >
+                     <Link to="/admin/excel-import">
+                   Import Applications
+                   </Link>
+                   </Button>
+                {/* <Button 
                     variant="outline" 
                     onClick={() => {
                         setSearchTerm('');
@@ -310,7 +316,7 @@ export default function AdminDashboard() {
                     className="h-[42px]"
                 >
                     Clear Filters
-                </Button>
+                </Button> */}
             </div>
         </div>
     );
@@ -391,9 +397,10 @@ export default function AdminDashboard() {
                                         <SelectTrigger className="w-[180px]">
                                             <SelectValue placeholder="Select Status" />
                                         </SelectTrigger>
-                                        <SelectContent>
+                                          <SelectContent>
                                             <SelectItem value="new">New</SelectItem>
                                             <SelectItem value="interviewed">Interviewed</SelectItem>
+                                             <SelectItem value="selected">Selected</SelectItem>
                                             <SelectItem value="rejected">Rejected</SelectItem>
                                             <SelectItem value="completed">Completed</SelectItem>
                                         </SelectContent>

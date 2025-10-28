@@ -1,17 +1,23 @@
 import './App.css'
+import { useEffect } from 'react';
+import { initAnalytics } from './utils/analytics';
 import HomePage from './pages/HomePage';
 import ApplicationForm from './pages/ApplicationForm';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PaymentSuccess from './pages/Payment_Success';
 import AdminLogin from './pages/adminLogin';
 import AdminDashboard from './pages/adminDashboard';
+import ExcelImport from "./components/Admin/ExcelImport";
 
 
 function App() {
+  useEffect(() =>{
+    initAnalytics();
+  },[]);
   return (
     <>
-
-      <BrowserRouter basename="/professional">
+       <BrowserRouter basename="/professional"> 
+      {/* <BrowserRouter basename="/"> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/apply-elite/:step" element={<ApplicationForm plan="elite" />} />
@@ -21,6 +27,7 @@ function App() {
           <Route path="/payment_success" element={<PaymentSuccess/>} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/excel-import" element={<ExcelImport />} />
         </Routes>
       </BrowserRouter>
     </>

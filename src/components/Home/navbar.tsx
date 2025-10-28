@@ -1,4 +1,5 @@
 import { Button } from '../ui/button';
+import reachout from '@/assets/ReachOut.png';
 
 export default function Navbar() {
     return (
@@ -9,7 +10,7 @@ export default function Navbar() {
             */}
             <div className="flex justify-between w-full items-center bg-background px-4 sm:px-[80px] py-[16px] sticky top-0 z-99">
                 <img
-                    src="../ReachOut.png"
+                    src={reachout}
                     alt="ReachOut Logo"
                     className="h-6 w-auto object-contain"
                 />
