@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import API from '../config/api';
 import { useNavigate,Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'; // Assuming you have a tabs component
@@ -110,9 +111,7 @@ export default function AdminDashboard() {
     const fetchApplications = async () => {
         try {
             // Fetch new applications
-
-             const newResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_applications.php?status=new', {
-            //const newResponse = await fetch('/professional/backend/fetch_applications.php?status=new', {
+            const newResponse = await fetch(API.FETCH_APPLICATIONS('new'), {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -131,9 +130,7 @@ export default function AdminDashboard() {
             }
 
             // Fetch updated applications
-
-             const updatedResponse = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/fetch_applications.php?status=updated', {
-           //  const updatedResponse = await fetch('/professional/backend/fetch_applications.php?status=updated', {
+            const updatedResponse = await fetch(API.FETCH_APPLICATIONS('updated'), {
                 credentials: 'include' // Include cookies for session
             });
             
@@ -174,9 +171,7 @@ export default function AdminDashboard() {
         );
 
         try {
-
-             const response = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/update_application_status.php', {
-        // const response = await fetch('/professional/backend/update_application_status.php', {
+            const response = await fetch(`${API.API_BASE_URL}/update_application_status.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

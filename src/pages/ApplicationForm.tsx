@@ -36,7 +36,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
 
     const planDetails = useMemo(() => ({
         elite: { title: "Elite Mentorship Program", price: "20,000" },
-        foundational: { title: "Foundational Impact Program", price: "10,000" },
+        foundational: { title: "Foundational Impact Program", price: "10,000" }
     }), []);
 
     const { title } = planDetails[plan];
@@ -52,6 +52,8 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
         return { total, basePrice, formattedTotal: `₹${total.toLocaleString('en-IN')}` };
     }, [plan, planDetails]);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Load Razorpay script
     useEffect(() => {
         const script = document.createElement("script");
@@ -64,6 +66,7 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
     }, []);
 
     const handlePayment = async () => {
+        setIsSubmitting(true);
         // Step 1: Create an order on your backend
          const orderResponse = await fetch(API.CREATE_ORDER, {
           //const orderResponse = await fetch('/professional/backend/create_order.php', {
@@ -152,21 +155,60 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
                     alert(`Payment verification failed: ${errorMessage}. Please contact support.`);
                 }
             },
-            prefill: {
-                name: formData.fullName,
-                email: formData.email,
-                contact: formData.phone,
-            },
-            notes: {
-                address: "1109, Ocus Quantum, Sector 51, Gurugram, Haryana, 122003",
-            },
-            theme: {
-                color: "#0d6efd",
-            },
         };
 
         const paymentObject = new (window as any).Razorpay(options);
         paymentObject.open();
+        setIsSubmitting(false);
+    };
+
+    const handlePayLater = async () => {
+        setIsSubmitting(true);
+        const postData = new FormData();
+        const finalFormData = { ...formData };
+
+        // If 'Others' is selected for expertise, use the specified value
+        if (finalFormData.area_of_expertise === 'Others (please specify)') {
+            finalFormData.area_of_expertise = finalFormData.other_expertise;
+        }
+
+        // Append all form data fields
+        for (const key in finalFormData) {
+            if (key === 'resume' && finalFormData.resume) {
+                postData.append('resume', finalFormData.resume, finalFormData.resumeFileName);
+            } else {
+                postData.append(key, (finalFormData as any)[key]);
+            }
+        }
+        // Add payment details and status for "Pay Later"
+        postData.append('programType', planDetails[plan].title);
+        postData.append('paymentAmount', String(paymentDetails.total));
+        postData.append('status', 'pending_payment'); // Mark as pending payment
+
+        try {
+            const response = await fetch(API.SUBMIT_APPLICATION_LATER, {
+                method: 'POST',
+                body: postData,
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (result.success) {
+                navigate('/application_submitted'); // Redirect to a confirmation page
+            } else {
+                throw new Error(result.message || 'Application submission failed');
+            }
+        } catch (error: unknown) {
+            console.error('Pay Later submission error:', error);
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            alert(`Application submission failed: ${errorMessage}. Please try again.`);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const [formData, setFormData] = useState<FormData>({
@@ -315,23 +357,33 @@ export default function ApplicationForm({ plan }: ApplicationFormProps) {
                     <Button
                         variant="outline"
                         onClick={handlePrevious}
-                        disabled={currentStepIndex === 0}
+                        disabled={currentStepIndex === 0 || isSubmitting}
                     >
                         Previous
                     </Button>
 
                     {currentStepIndex === steps.length - 1 ? (
-                        <Button
-                            onClick={handlePayment}
-                            disabled={!termsAccepted}
-                            className="h-12 md:w-auto md:flex-grow max-w-xs text-lg shadow-glow cursor-pointer"
-                        >
-                            Pay Now - {paymentDetails.formattedTotal}
-                        </Button>
+                        <div className="flex gap-4">
+                            <Button
+                                onClick={handlePayLater}
+                                disabled={!termsAccepted || isSubmitting}
+                                variant="secondary"
+                                className="h-12 md:w-auto max-w-xs text-lg cursor-pointer"
+                            >
+                                Pay Later
+                            </Button>
+                            <Button
+                                onClick={handlePayment}
+                                disabled={!termsAccepted || isSubmitting}
+                                className="h-12 md:w-auto md:flex-grow max-w-xs text-lg shadow-glow cursor-pointer"
+                            >
+                                Pay Now - {paymentDetails.formattedTotal}
+                            </Button>
+                        </div>
                     ) : (
                         <Button
                             onClick={handleNext}
-                            disabled={!isStepValid}
+                            disabled={!isStepValid || isSubmitting}
                         >
                             Next
                         </Button>
