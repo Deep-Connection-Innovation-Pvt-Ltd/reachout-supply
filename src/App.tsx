@@ -17,12 +17,8 @@ function App() {
   },[]);
   return (
     <>
-
        {/* <BrowserRouter basename="/professional">  */}
       <BrowserRouter basename="/">
-       <BrowserRouter basename="/professional"> 
-      {/* <BrowserRouter basename="/"> */}
-
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/apply-elite/:step" element={<ApplicationForm plan="elite" />} />
@@ -40,4 +36,4 @@ function App() {
   )
 }
 
-export default App;
+export default App
