@@ -5,15 +5,19 @@ export const trackScrollDepth = () => {
     const scrollTop = window.scrollY;
     const scrollPercent = Math.round((scrollTop / scrollHeight) * 100);
 
-    if (!window.scrollEventsFired) window.scrollEventsFired = {};
+    // Initialize scrollEventsFired if it doesn't exist
+    if (!window.scrollEventsFired) {
+      window.scrollEventsFired = {};
+    }
 
     [25, 50, 75, 100].forEach(threshold => {
-      if (scrollPercent >= threshold && !window.scrollEventsFired[threshold]) {
+      if (scrollPercent >= threshold && !window.scrollEventsFired?.[threshold]) {
         window.gtag('event', 'scroll_depth', {
           scroll_percentage: threshold,
           page_path: window.location.pathname
         });
-        window.scrollEventsFired[threshold] = true;
+        // We can safely use non-null assertion here because we initialized it above
+        window.scrollEventsFired![threshold] = true;
       }
     });
   });

@@ -1,6 +1,8 @@
+
 // const API_BASE_URL = 'http://localhost/reachout-supply-pri/reachout-supply/backend';
 const API_BASE_URL = 'https://reachout.deepconnection.life/professional/backend';
 
+// const API_BASE_URL = 'http://localhost/reachout-supply-pri/reachout-supply/backend';
 export const API_ENDPOINTS = {
  // Admin
  ADMIN_LOGIN: `${API_BASE_URL}/admin_login.php`,
