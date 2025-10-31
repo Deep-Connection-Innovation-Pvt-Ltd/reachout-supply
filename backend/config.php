@@ -8,7 +8,7 @@ $dotenv->load();
 $razorpay_key_id = $_ENV['RAZORPAY_KEY_ID'] ?? getenv('RAZORPAY_KEY_ID');
 $razorpay_secret = $_ENV['RAZORPAY_KEY_SECRET'] ?? getenv('RAZORPAY_KEY_SECRET');
 
-$host = "localhost";
+$host = "127.0.0.1";
 $user = "root";          // your db username
 $pass = "";              // your db password
 $dbname = "reachout_professional";
