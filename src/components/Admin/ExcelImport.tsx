@@ -56,7 +56,10 @@ export default function ExcelImport() {
       const cleaned = payload.filter(r => r.email || r.name); // example
       console.log("Sending payload:", cleaned);
 
+
       const res = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/import_applications.php', {
+      // const res = await fetch('http://localhost/reachout-supply-pri/reachout-supply/backend/import_applications.php', {
+       const res = await fetch('/professional/backend/import_applications.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // include session cookies if needed

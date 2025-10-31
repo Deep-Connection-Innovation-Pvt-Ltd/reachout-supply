@@ -3,6 +3,7 @@
 const API_BASE_URL = 'https://reachout.deepconnection.life/professional/backend';
 
 // const API_BASE_URL = 'http://localhost/reachout-supply-pri/reachout-supply/backend';
+// const API_BASE_URL = 'http://localhost/reachoutprof/backend';
 export const API_ENDPOINTS = {
  // Admin
  ADMIN_LOGIN: `${API_BASE_URL}/admin_login.php`,
@@ -12,6 +13,8 @@ export const API_ENDPOINTS = {
  // Payment
  CREATE_ORDER: `${API_BASE_URL}/create_order.php`,
  VERIFY_PAYMENT: `${API_BASE_URL}/verify_payment.php`,
+
+ SUBMIT_APPLICATION_LATER: `${API_BASE_URL}/submit_application.php`,
 EXCEL_IMPORT: `${API_BASE_URL}/import_applications.php`,
  // Add more endpoints as needed
 };

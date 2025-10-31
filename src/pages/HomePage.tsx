@@ -11,6 +11,8 @@ import Footer from '../components/Home/footer';
 export default function Home() {
 
     // const targetDeadline = "2025-11-2T06:30:00Z";
+
+    // const targetDeadline = "2025-10-29T06:30:00Z";
     return (
         <>
             <Navbar />
